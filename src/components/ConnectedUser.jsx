@@ -17,6 +17,7 @@ export const ConnectedUser = ({ accounts }) => {
   const[candidates, setCandidates] = useState([])
   const[totalSupply, setTotalSupply] = useState()
   const[owner, setOwner] = useState()
+  const[loading, setLoading] = useState(true)
 
   let isOwner = Boolean(accounts[0] === owner)
 
@@ -25,9 +26,12 @@ export const ConnectedUser = ({ accounts }) => {
   }, [])
 
   async function connectContrac(){
+    let wallet
     if(window.ethereum){
-      const provider = new ethers.providers.Web3Provider(window.ethereum)
-      const signer = provider.getSigner()
+      const provider = new ethers.providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/f633827e07134ef090bdb1a272f6eb39`)
+      wallet = accounts[0]
+      console.log(wallet);
+      const signer = provider.getSigner(wallet);
       const contract = new ethers.Contract(
         ElectionAddress,
         ElectionABI.abi,
@@ -57,9 +61,9 @@ export const ConnectedUser = ({ accounts }) => {
 					array.push(newCandidate)
 				})
 			}
-
 			setCandidates(array)
     }
+    setLoading(false)
   }
 
   const BalanceOf = async () =>{
@@ -95,7 +99,8 @@ export const ConnectedUser = ({ accounts }) => {
         </thead>
       </table>
       <hr />
-      {candidates.map((item) =>(
+      {loading ? (<p>loading...</p>) : (
+        candidates.map((item) =>(
         <table className="table">
           <thead>
             <tr>
@@ -105,7 +110,8 @@ export const ConnectedUser = ({ accounts }) => {
             </tr>
           </thead>
         </table>
-      ))}
+      ))
+      )}
       <hr />
       <div className="container-user">
         <div className="container-addr">
