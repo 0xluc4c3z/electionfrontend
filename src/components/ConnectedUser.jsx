@@ -1,6 +1,6 @@
 import React from 'react'
 import { ethers } from 'ethers'
-import ElectionABI from '../web3/Electionsol.json'
+import ElectionABI from '../../../artifacts/contracts/Election.sol/Election.json'
 import { useState, useEffect } from 'react'
 import { ConnectedOwner } from './ConnectedOwner'
 
@@ -120,7 +120,7 @@ export const ConnectedUser = ({ accounts }) => {
         <div className="container-vote">
           <p className="candidatesSelect">Select Candidate</p>
           <select className="form-control" id="candidatesSelect" onChange={handleChange}>
-						<option disabled selected>Select a candidate</option>
+						<option disabled>Select a candidate</option>
 						{candidates.map((item)=>(
 							<option value={item.id} key={item.id}>{item.name}</option>
 						))}
